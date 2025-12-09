@@ -1,0 +1,5 @@
+{
+  "name": "RPP Generator AI",
+  "description": "Generator Rencana Pelaksanaan Pembelajaran (RPP) otomatis berbasis AI untuk guru, disesuaikan dengan Jenjang, CP, dan Kondisi Kelas.",
+  "requestFramePermissions": []
+}
