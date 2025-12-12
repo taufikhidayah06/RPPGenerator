@@ -1,3 +1,4 @@
+
 export enum EducationLevel {
   SMA = 'SMA/SMK/MA',
 }
@@ -14,6 +15,7 @@ export interface RPPRequest {
   academicYear: string; // Tahun Ajaran
   semester: string; // Semester
   timeAllocation: string; // Alokasi Waktu (Input User)
+  learningMethod: string; // Metode/Model Pembelajaran
 }
 
 export interface DeepLearningFlow {
@@ -52,6 +54,7 @@ export interface LKPD {
 
 export interface RPPResponse {
   topic_refined: string; // Topik yang dipertajam AI
+  learning_objectives: string[]; // Tujuan Pembelajaran dari CP
   graduate_profile_dimensions: string[]; // 8 Dimensi specific
   design_elements: DesignElements;
   learning_flow: DeepLearningFlow[];

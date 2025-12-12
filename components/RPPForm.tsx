@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { EducationLevel, RPPRequest } from '../types';
 
@@ -18,6 +19,7 @@ const RPPForm: React.FC<RPPFormProps> = ({ onSubmit, isLoading }) => {
   const [topic, setTopic] = useState('');
   const [cp, setCp] = useState('');
   const [conditions, setConditions] = useState('');
+  const [learningMethod, setLearningMethod] = useState('Problem Based Learning (PBL)');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +35,7 @@ const RPPForm: React.FC<RPPFormProps> = ({ onSubmit, isLoading }) => {
       topic,
       cp,
       conditions,
+      learningMethod,
     });
   };
 
@@ -142,6 +145,30 @@ const RPPForm: React.FC<RPPFormProps> = ({ onSubmit, isLoading }) => {
 
       {/* Content Group */}
       <div className="space-y-4">
+        <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Model Pembelajaran</label>
+            <div className="relative">
+                <select
+                    value={learningMethod}
+                    onChange={(e) => setLearningMethod(e.target.value)}
+                    required
+                    className="w-full appearance-none rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-slate-700 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+                >
+                    <option value="Problem Based Learning (PBL)">Problem Based Learning (PBL)</option>
+                    <option value="Project Based Learning (PjBL)">Project Based Learning (PjBL)</option>
+                    <option value="Discovery Learning">Discovery Learning</option>
+                    <option value="Inquiry Learning">Inquiry Learning</option>
+                    <option value="Cooperative Learning">Cooperative Learning</option>
+                    <option value="Pembelajaran Berdiferensiasi">Pembelajaran Berdiferensiasi</option>
+                    <option value="Teaching at the Right Level (TaRL)">Teaching at the Right Level (TaRL)</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">Sintaks pembelajaran akan disesuaikan dengan model yang dipilih.</p>
+        </div>
+
         <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Materi / Tema</label>
             <input

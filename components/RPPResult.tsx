@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { RPPResponse, RPPRequest } from '../types';
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, HeadingLevel, AlignmentType, PageBreak } from "docx";
@@ -109,6 +110,10 @@ const RPPResult: React.FC<RPPResultProps> = ({ data, request, onReset }) => {
                       createCell(`: ${request.timeAllocation}`)
                   ]}),
                   new TableRow({ children: [
+                      createCell("Model Pembelajaran", true, "FFFFFF", 25), 
+                      createCell(`: ${request.learningMethod}`)
+                  ]}),
+                  new TableRow({ children: [
                       createCell("Topik/Materi", true, "FFFFFF", 25), 
                       createCell(`: ${data.topic_refined}`)
                   ]}),
@@ -124,6 +129,12 @@ const RPPResult: React.FC<RPPResultProps> = ({ data, request, onReset }) => {
 
               // 2. DESAIN PEMBELAJARAN
               new Paragraph({ text: "II. DESAIN PEMBELAJARAN", heading: HeadingLevel.HEADING_2, spacing: { before: 200 } }),
+              
+              // Tujuan Pembelajaran (Added)
+              new Paragraph({ text: "Tujuan Pembelajaran:", bold: true, spacing: { after: 100 } }),
+              ...data.learning_objectives.map(obj => new Paragraph({ text: obj, bullet: { level: 0 } })),
+              new Paragraph({ text: "", spacing: { after: 200 } }),
+
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: tableBorders,
@@ -350,6 +361,10 @@ const RPPResult: React.FC<RPPResultProps> = ({ data, request, onReset }) => {
                         <td className="py-2 font-bold">Alokasi Waktu</td>
                         <td className="py-2">: {request.timeAllocation}</td>
                     </tr>
+                    <tr className="border-b border-slate-100">
+                        <td className="py-2 font-bold">Model Pembelajaran</td>
+                        <td className="py-2">: {request.learningMethod}</td>
+                    </tr>
                     <tr>
                         <td className="py-2 font-bold">Materi/Tema</td>
                         <td className="py-2">: {data.topic_refined}</td>
@@ -376,6 +391,17 @@ const RPPResult: React.FC<RPPResultProps> = ({ data, request, onReset }) => {
         {/* SECTION II: DESAIN */}
         <div className="mb-8">
             <h2 className="text-lg font-bold text-slate-900 mb-4 border-b border-slate-300 pb-1">II. Desain Pembelajaran</h2>
+            
+            {/* Added: Learning Objectives */}
+            <div className="mb-6 p-4 border border-indigo-100 bg-indigo-50/50 rounded-lg print:border-none print:bg-white print:p-0">
+                <h3 className="font-bold text-slate-900 mb-2">Tujuan Pembelajaran</h3>
+                <ul className="list-disc pl-5 space-y-1 text-slate-700 text-sm">
+                    {data.learning_objectives.map((obj, i) => (
+                        <li key={i}>{obj}</li>
+                    ))}
+                </ul>
+            </div>
+
             <div className="grid grid-cols-1 gap-4">
                 <div className="p-4 border border-slate-200 rounded-lg">
                     <strong className="block text-primary mb-1">Praktik Pedagogis</strong>

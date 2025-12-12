@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { RPPRequest, RPPResponse } from "../types";
 
@@ -30,18 +31,23 @@ export const generateRPP = async (data: RPPRequest): Promise<RPPResponse> => {
     - Tema/Materi: ${data.topic}
     - Capaian Pembelajaran (CP): "${data.cp}"
     - Kondisi Kelas/Siswa: "${data.conditions}"
+    - Model Pembelajaran: "${data.learningMethod}" (PENTING: Gunakan sintaks model ini)
 
     TUGAS UTAMA:
     1. Identifikasi Dimensi Profil Lulusan yang relevan.
-    2. Rancang Desain Pembelajaran 4 Pilar.
-    3. Susun Pengalaman Pembelajaran (Flow) yang SANGAT RINCI, HOLISTIK, dan BERBASIS STUDI KASUS.
-    4. Rancang Asesmen.
-    5. Buat LKPD.
+    2. Turunkan Capaian Pembelajaran (CP) menjadi Tujuan Pembelajaran (TP) yang konkret.
+    3. Rancang Desain Pembelajaran 4 Pilar, sesuaikan Praktik Pedagogis dengan Model ${data.learningMethod}.
+    4. Susun Pengalaman Pembelajaran (Flow) yang SANGAT RINCI, HOLISTIK, dan BERBASIS STUDI KASUS, mengikuti langkah-langkah/sintaks dari model ${data.learningMethod}.
+    5. Rancang Asesmen.
+    6. Buat LKPD.
     
     INSTRUKSI KHUSUS "PENGALAMAN PEMBELAJARAN" (Flow):
-    - **Memahami:** Jelaskan aktivitas eksplorasi konsep yang mendalam. Jangan hanya ceramah.
-    - **Mengaplikasi (PENTING):** WAJIB sertakan **STUDI KASUS KONKRET** atau masalah dunia nyata (Real World Problem) yang relevan dengan materi ini. Deskripsikan kasusnya dalam aktivitas. Siswa harus memecahkan masalah ini. Hubungkan dengan konteks lingkungan/sosial secara holistik.
-    - **Merefleksi:** Aktivitas metakognitif siswa untuk menyimpulkan dan merencanakan tindak lanjut.
+    - Struktur tetap mengikuti: Memahami (Exploration), Mengaplikasi (Elaboration/Case Study), Merefleksi (Evaluation).
+    - Namun, di dalam deskripsi aktivitas, **INTEGRASIKAN SINTAKS dari ${data.learningMethod}**. 
+    - Contoh jika PBL: Munculkan orientasi masalah di awal, pengorganisasian siswa, penyelidikan, hingga penyajian hasil.
+    - **Memahami:** Jelaskan aktivitas eksplorasi konsep.
+    - **Mengaplikasi (PENTING):** WAJIB sertakan **STUDI KASUS KONKRET** atau masalah dunia nyata yang relevan. Siswa harus memecahkan masalah ini menggunakan sintaks ${data.learningMethod}.
+    - **Merefleksi:** Aktivitas metakognitif.
 
     Format JSON Output (Strict):
   `;
@@ -55,10 +61,15 @@ export const generateRPP = async (data: RPPRequest): Promise<RPPResponse> => {
         type: Type.ARRAY,
         items: { type: Type.STRING },
       },
+      learning_objectives: {
+        type: Type.ARRAY,
+        items: { type: Type.STRING },
+        description: "Daftar Tujuan Pembelajaran yang diturunkan dari CP"
+      },
       design_elements: {
         type: Type.OBJECT,
         properties: {
-          pedagogical_practice: { type: Type.STRING },
+          pedagogical_practice: { type: Type.STRING, description: `Strategi pengajaran menggunakan model ${data.learningMethod}` },
           learning_partnership: { type: Type.STRING },
           learning_environment: { type: Type.STRING },
           digital_utilization: { type: Type.STRING },
@@ -71,7 +82,7 @@ export const generateRPP = async (data: RPPRequest): Promise<RPPResponse> => {
           type: Type.OBJECT,
           properties: {
             phase: { type: Type.STRING, enum: ["Memahami", "Mengaplikasi", "Merefleksi"] },
-            activity: { type: Type.STRING, description: "Deskripsi aktivitas yang panjang, rinci, mengandung studi kasus (pada fase Mengaplikasi) dan holistik." },
+            activity: { type: Type.STRING, description: `Deskripsi aktivitas rinci dengan sintaks ${data.learningMethod} dan studi kasus` },
             duration: { type: Type.STRING },
           },
           required: ["phase", "activity", "duration"]
@@ -130,6 +141,7 @@ export const generateRPP = async (data: RPPRequest): Promise<RPPResponse> => {
     required: [
       "topic_refined",
       "graduate_profile_dimensions",
+      "learning_objectives",
       "design_elements",
       "learning_flow",
       "assessments",
